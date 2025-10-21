@@ -1,0 +1,8 @@
+{
+  "name": "n8n-custom-nodes",
+  "private": true,
+  "packageManager": "pnpm@10.17.1",
+  "dependencies": {
+    "@n8n/node-cli": "0.13.0"
+  }
+}
