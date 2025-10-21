@@ -1,2 +1,4 @@
 minimumReleaseAge: 10080
 savePrefix: ''
+packages:
+  - n8n-nodes-add-extension-to-drive
