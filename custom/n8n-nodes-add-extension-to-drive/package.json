@@ -30,7 +30,7 @@
         "strict": true,
         "credentials": [],
         "nodes": [
-            "dist/nodes/Example/Example.node.js"
+            "dist/nodes/AddFileExtension/AddFileExtension.node.js"
         ]
     },
     "devDependencies": {
