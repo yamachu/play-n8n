@@ -17,7 +17,9 @@ services:
       - n8n-networks
 
   n8n:
-    image: docker.n8n.io/n8nio/n8n
+    build:
+      context: ./custom
+      dockerfile: ../Dockerfile.n8n
     restart: always
     environment:
       - DB_TYPE=postgresdb
@@ -33,11 +35,13 @@ services:
       - N8N_ENCRYPTION_KEY=${N8N_ENCRYPTION_KEY}
       - TZ=JST-9
       - GENERIC_TIMEZONE=Asia/Tokyo
+      # Custom Extensions Path, semicolon separated if multiple
+      - N8N_CUSTOM_EXTENSIONS=/data/custom/n8n-nodes-add-extension-to-drive
     links:
       - postgres
     volumes:
       - ./n8n_storage:/home/node/.n8n
-      - ./custom:/home/node/.n8n/custom
+      - ./custom:/data/custom
     depends_on:
       postgres:
         condition: service_healthy
