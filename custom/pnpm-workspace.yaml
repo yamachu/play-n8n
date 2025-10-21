@@ -1,4 +1,13 @@
-minimumReleaseAge: 10080
-savePrefix: ''
 packages:
   - n8n-nodes-add-extension-to-drive
+
+catalog:
+  '@n8n/node-cli': 0.13.0
+  eslint: 9.32.0
+  n8n-workflow: '*'
+  prettier: 3.6.2
+  typescript: 5.9.2
+
+minimumReleaseAge: 10080
+
+savePrefix: ''
