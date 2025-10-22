@@ -6,7 +6,7 @@ n8nをDocker Composeで動かして、Custom Nodesを作って試すサンプル
 
 - custom/: Custom Nodesのソースコードを配置するディレクトリ
     - n8n-nodes-add-extension-to-drive/: Google Driveのダウンロードノードの後にくっつけたりすると便利な拡張ノードのサンプル
-- Dockerfile.n8n: n8nのカスタムDockerイメージをビルドするためのDockerfile
+- n8n.dockerfile: n8nのカスタムDockerイメージをビルドするためのDockerfile
 - compose.yaml: Docker Composeの設定ファイル
 
 ## 使い方
