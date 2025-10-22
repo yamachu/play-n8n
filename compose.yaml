@@ -19,7 +19,7 @@ services:
   n8n:
     build:
       context: ./custom
-      dockerfile: ../Dockerfile.n8n
+      dockerfile: ../n8n.dockerfile
     restart: always
     environment:
       - DB_TYPE=postgresdb
