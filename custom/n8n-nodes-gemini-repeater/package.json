@@ -20,9 +20,7 @@
 		"build:watch": "tsc --watch",
 		"dev": "n8n-node dev",
 		"lint": "n8n-node lint",
-		"lint:fix": "n8n-node lint --fix",
-		"release": "n8n-node release",
-		"prepublishOnly": "n8n-node prerelease"
+		"lint:fix": "n8n-node lint --fix"
 	},
     "files": [
         "dist"
@@ -36,13 +34,12 @@
         ]
     },
     "devDependencies": {
-        "@n8n/node-cli": "*",
-        "eslint": "9.32.0",
-        "prettier": "3.6.2",
-        "release-it": "^19.0.4",
-        "typescript": "5.9.2"
+        "@n8n/node-cli": "catalog:",
+        "eslint": "catalog:",
+        "prettier": "catalog:",
+        "typescript": "catalog:"
     },
     "peerDependencies": {
-        "n8n-workflow": "*"
+        "n8n-workflow": "catalog:"
     }
 }

@@ -1,5 +1,6 @@
 packages:
   - n8n-nodes-add-extension-to-drive
+  - n8n-nodes-gemini-repeater
 
 catalog:
   '@n8n/node-cli': 0.13.0
