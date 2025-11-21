@@ -36,7 +36,7 @@ services:
       - TZ=JST-9
       - GENERIC_TIMEZONE=Asia/Tokyo
       # Custom Extensions Path, semicolon separated if multiple
-      - N8N_CUSTOM_EXTENSIONS=/data/custom/n8n-nodes-add-extension-to-drive
+      - N8N_CUSTOM_EXTENSIONS=/data/custom/n8n-nodes-add-extension-to-drive;/data/custom/n8n-nodes-gemini-repeater
     links:
       - postgres
     volumes:
