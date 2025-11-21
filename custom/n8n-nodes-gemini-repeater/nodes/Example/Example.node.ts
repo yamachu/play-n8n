@@ -1,10 +1,11 @@
 import type {
 	IExecuteFunctions,
+	IHttpRequestMethods,
 	INodeExecutionData,
 	INodeType,
 	INodeTypeDescription,
 } from 'n8n-workflow';
-import { NodeConnectionType, NodeOperationError } from 'n8n-workflow';
+import { NodeConnectionTypes, NodeOperationError } from 'n8n-workflow';
 
 export class Example implements INodeType {
 	description: INodeTypeDescription = {
@@ -17,62 +18,81 @@ export class Example implements INodeType {
 		defaults: {
 			name: 'Example',
 		},
-		inputs: [NodeConnectionType.Main],
-		outputs: [NodeConnectionType.Main],
-		usableAsTool: true,
-		properties: [
-			// Node properties which the user gets displayed and
-			// can change on the node.
+		inputs: [NodeConnectionTypes.Main],
+		outputs: [NodeConnectionTypes.Main],
+		usableAsTool: undefined,
+		properties: [],
+		credentials: [
 			{
-				displayName: 'My String',
-				name: 'myString',
-				type: 'string',
-				default: '',
-				placeholder: 'Placeholder value',
-				description: 'The description text',
+				// eslint-disable-next-line @n8n/community-nodes/no-credential-reuse
+				name: 'googlePalmApi',
+				required: true,
 			},
 		],
 	};
 
-	// The function below is responsible for actually doing whatever this node
-	// is supposed to do. In this case, we're just appending the `myString` property
-	// with whatever the user has entered.
-	// You can make async calls and use `await`.
 	async execute(this: IExecuteFunctions): Promise<INodeExecutionData[][]> {
 		const items = this.getInputData();
+		const returnData: INodeExecutionData[] = [];
+		const apiKey = (await this.getCredentials<{ apiKey: string }>('googlePalmApi')).apiKey;
 
-		let item: INodeExecutionData;
-		let myString: string;
-
-		// Iterates over all input items and add the key "myString" with the
-		// value the parameter "myString" resolves to.
-		// (This could be a different value for each item in case it contains an expression)
-		for (let itemIndex = 0; itemIndex < items.length; itemIndex++) {
-			try {
-				myString = this.getNodeParameter('myString', itemIndex, '') as string;
-				item = items[itemIndex];
-
-				item.json.myString = myString;
-			} catch (error) {
-				// This node should never fail but we want to showcase how
-				// to handle errors.
-				if (this.continueOnFail()) {
-					items.push({ json: this.getInputData(itemIndex)[0].json, error, pairedItem: itemIndex });
-				} else {
-					// Adding `itemIndex` allows other workflows to handle this error
-					if (error.context) {
-						// If the error thrown already contains the context property,
-						// only append the itemIndex
-						error.context.itemIndex = itemIndex;
-						throw error;
-					}
-					throw new NodeOperationError(this.getNode(), error, {
-						itemIndex,
-					});
-				}
-			}
+		if (!apiKey) {
+			throw new NodeOperationError(this.getNode(), 'No API key set in credentials');
 		}
 
-		return [items];
+		for (let i = 0; i < items.length; i++) {
+			const headers = items[i].json.headers as Record<string, string>;
+
+			const url = headers['x-original-gemini-request-url'];
+			const method = (
+				headers['x-original-gemini-request-method'] || 'GET'
+			).toUpperCase() as IHttpRequestMethods;
+			const body = items[i].json.body;
+
+			if (!url) {
+				throw new NodeOperationError(
+					this.getNode(),
+					'Missing X-ORIGINAL-GEMINI-REQUEST-URL header',
+				);
+			}
+
+			if (!url.startsWith('https://generativelanguage.googleapis.com/')) {
+				throw new NodeOperationError(
+					this.getNode(),
+					'Invalid X-ORIGINAL-GEMINI-REQUEST-URL header',
+				);
+			}
+
+			// TODO: Logging request sender info for monitoring
+
+			const requestHeaders = {
+				'Content-Type': 'application/json',
+			};
+
+			const fullResponse = await this.helpers
+				.httpRequest({
+					url: url + '?key=' + apiKey,
+					method,
+					headers: requestHeaders,
+					body: method === 'GET' || method === 'HEAD' ? undefined : JSON.stringify(body),
+					returnFullResponse: true,
+				})
+				.catch((error) => {
+					throw new NodeOperationError(this.getNode(), error);
+				});
+
+			// fullResponse typically contains `statusCode`, `headers`, and `body`.
+			const { statusCode, headers: respHeaders, body: respBody } = fullResponse;
+
+			returnData.push({
+				json: {
+					statusCode,
+					headers: respHeaders instanceof Map ? Object.fromEntries(respHeaders) : respHeaders,
+					body: respBody,
+				},
+			});
+		}
+
+		return [returnData];
 	}
 }
