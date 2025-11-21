@@ -7,16 +7,16 @@ import type {
 } from 'n8n-workflow';
 import { NodeConnectionTypes, NodeOperationError } from 'n8n-workflow';
 
-export class Example implements INodeType {
+export class GeminiRepeater implements INodeType {
 	description: INodeTypeDescription = {
-		displayName: 'Example',
-		name: 'example',
+		displayName: 'Gemini Repeater',
+		name: 'geminiRepeater',
 		icon: { light: 'file:example.svg', dark: 'file:example.dark.svg' },
 		group: ['input'],
 		version: 1,
-		description: 'Basic Example Node',
+		description: 'Gemini Request Sender Proxy Node',
 		defaults: {
-			name: 'Example',
+			name: 'Gemini Repeater',
 		},
 		inputs: [NodeConnectionTypes.Main],
 		outputs: [NodeConnectionTypes.Main],

@@ -1,7 +1,7 @@
 {
     "name": "n8n-nodes-gemini-repeater",
     "version": "0.1.0",
-    "description": "",
+    "description": "Gemini Repeater node for n8n",
     "license": "MIT",
     "homepage": "",
     "keywords": [
@@ -13,9 +13,9 @@
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/<...>/n8n-nodes-<...>.git"
+        "url": "https://github.com/yamachu/play-n8n.git"
     },
-   "scripts": {
+    "scripts": {
 		"build": "n8n-node build",
 		"build:watch": "tsc --watch",
 		"dev": "n8n-node dev",
@@ -30,7 +30,7 @@
         "strict": true,
         "credentials": [],
         "nodes": [
-            "dist/nodes/Example/Example.node.js"
+            "dist/nodes/GeminiRepeater/GeminiRepeater.node.js"
         ]
     },
     "devDependencies": {
