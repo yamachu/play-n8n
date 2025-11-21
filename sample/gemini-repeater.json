@@ -1,0 +1,84 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "a6118b63-6d9e-467f-b86f-8d68fc257ce6",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "364aff4e-75fe-41a0-9a36-d0298bc25aee",
+      "name": "Webhook",
+      "webhookId": "a6118b63-6d9e-467f-b86f-8d68fc257ce6"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json['body'] }}",
+        "options": {
+          "responseCode": "={{ $json.statusCode }}"
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        448,
+        0
+      ],
+      "id": "3eeda089-4283-41c7-99f5-391d779ad384",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {},
+      "type": "CUSTOM.geminiRepeater",
+      "typeVersion": 1,
+      "position": [
+        224,
+        0
+      ],
+      "id": "b1a5d903-e927-4d87-8761-38979e912fd4",
+      "name": "Gemini Repeater",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "QfEXSV3SiDi7SWsH",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Gemini Repeater",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gemini Repeater": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "e2521d42f99d33b6fe3d2ea018bea7f295042f0d382779045403e4445cf33678"
+  }
+}
